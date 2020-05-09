@@ -64,11 +64,15 @@ public class ListenerRecipe implements Listener {
 
     @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent event) {
+        // Bukkit.broadcastMessage(">broken? event");
         if (!(event.getWhoClicked() instanceof Player)) return;
+        // Bukkit.broadcastMessage(">broken? player");
         if (event.getAction() == InventoryAction.SWAP_WITH_CURSOR &&
                 event.isRightClick() &&
                 event.getCursor().getType() == Material.ARROW) {
+            // Bukkit.broadcastMessage(">broken? action");
             if (!("normalQuiver".equals(NBTHelper.getString(event.getCurrentItem(), "id")))) return;
+            // Bukkit.broadcastMessage(">broken? quiver");
             // get all needet values
             ItemStack arrow = event.getCursor();
             ItemStack quiver = event.getCurrentItem();
@@ -78,7 +82,7 @@ public class ListenerRecipe implements Listener {
             // calc left arrow space
             int leftAmount = maxArrows - accArrows;
             int fill = Math.min(leftAmount, amount);
-            Bukkit.broadcastMessage("" + fill);
+            // Bukkit.broadcastMessage("" + fill);
             accArrows += fill;
             arrow.setAmount(amount - fill);
             NBTHelper.addInteger(quiver, "accArrows", accArrows);
@@ -92,6 +96,7 @@ public class ListenerRecipe implements Listener {
             event.setCancelled(true);
             Player player = (Player) event.getWhoClicked();
             player.updateInventory();
+            player.sendMessage("Loaded "+ fill+ " Arrows!");
 
 
         }
