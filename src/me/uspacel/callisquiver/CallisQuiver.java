@@ -8,6 +8,8 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 
 public class CallisQuiver extends JavaPlugin {
@@ -20,6 +22,11 @@ public class CallisQuiver extends JavaPlugin {
         ItemMeta quivermeta = quiver.getItemMeta();
         // set display name
         quivermeta.setDisplayName("Arrow Quiver");
+        // new list
+        ArrayList<String> lore = new ArrayList();
+        lore.add("Arrows");
+        //add lore
+        quivermeta.setLore(lore);
         // display in item data
         quiver.setItemMeta(quivermeta);
         // make namekey
