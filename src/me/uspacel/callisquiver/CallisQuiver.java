@@ -34,7 +34,7 @@ public class CallisQuiver extends JavaPlugin {
         quivermeta.setDisplayName("Arrow Quiver");
         // new list
         ArrayList<String> lore = new ArrayList();
-        lore.add("Arrows: "+ 8+ "/256");
+        lore.add("Arrows: "+ 8 + "/256");
 
         //add lore
         quivermeta.setLore(lore);

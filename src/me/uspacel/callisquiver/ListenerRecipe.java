@@ -7,10 +7,12 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.Recipe;
@@ -96,7 +98,31 @@ public class ListenerRecipe implements Listener {
             event.setCancelled(true);
             Player player = (Player) event.getWhoClicked();
             player.updateInventory();
-            player.sendMessage("Loaded "+ fill+ " Arrows!");
+            player.sendMessage("Loaded " + fill + " Arrows!");
+
+
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteractEvent(PlayerInteractEvent event) {
+        if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
+        // Bukkit.broadcastMessage(">rightclick");
+        if (!(event.getMaterial() == Material.BOW)) return;
+        // Bukkit.broadcastMessage(">bow");
+        Player player = event.getPlayer();
+        ItemStack[] inventory = player.getInventory().getStorageContents();
+        for (int i = 0; i < inventory.length; i++) {
+
+            if (inventory[i] == null || !(inventory[i].getType() == Material.CHEST)) continue;
+            if (!("normalQuiver".equals(NBTHelper.getString(inventory[i], "id")))) continue;
+            if (1 > (NBTHelper.getInteger(inventory[i], "accArrow"))) continue;
+            int empty = player.getInventory().firstEmpty();
+            if (empty <= -1) {
+                continue;
+            } else {
+                player.getInventory().addItem(new ItemStack(Material.ARROW, 1));
+            }
 
 
         }
