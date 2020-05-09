@@ -20,7 +20,7 @@ public class Utility {
         if (r2 instanceof ShapedRecipe && r1 instanceof ShapedRecipe)  {
             // Bukkit.broadcastMessage(">SHAPED");
             Map<Character, ItemStack> ri1 = ((ShapedRecipe) r2).getIngredientMap();
-            Bukkit.getLogger().info(ri1.toString());
+            // Bukkit.getLogger().info(ri1.toString());
             Map<Character, ItemStack> ri2 = ((ShapedRecipe) r1).getIngredientMap();
             // Bukkit.broadcastMessage(ri1.toString());
             // Bukkit.broadcastMessage(ri2.toString());

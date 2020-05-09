@@ -39,6 +39,8 @@ public class CallisQuiver extends JavaPlugin {
         quivermeta.setLore(lore);
         // display in item data
         quiver.setItemMeta(quivermeta);
+        // add Sting
+        NBTHelper.addString(quiver, "id", "normalQuiver");
         // make namekey
         NamespacedKey quiverkey = new NamespacedKey(this, "arrow_quiver");
         // create recipe
