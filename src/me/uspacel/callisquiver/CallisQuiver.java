@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,9 +14,18 @@ import java.util.Collections;
 import java.util.logging.Level;
 
 public class CallisQuiver extends JavaPlugin {
+
+    public RecipeHolder recipeHolder;
+    public static CallisQuiver plugin = null;
+
     @Override
     public void onEnable() {
+        plugin = this;
         this.getLogger().info("start successful");
+        recipeHolder = new RecipeHolder();
+
+        getServer().getPluginManager().registerEvents(new ListenerRecipe(), this);
+
         // new item
         ItemStack quiver = new ItemStack(Material.CHEST);
         // item meta
@@ -37,6 +47,9 @@ public class CallisQuiver extends JavaPlugin {
         quiverrecipe.setIngredient('A', Material.ARROW);
         quiverrecipe.setIngredient('C', Material.CHEST);
         Bukkit.addRecipe(quiverrecipe);
+        // hold recipe
+        recipeHolder.recipes.add(quiverrecipe);
+
 
     }
 
