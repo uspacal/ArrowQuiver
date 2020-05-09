@@ -2,9 +2,9 @@ package me.uspacel.callisquiver;
 
 import org.bukkit.inventory.Recipe;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RecipeHolder {
-    public ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+    public HashMap<String, Recipe> recipes = new HashMap<String, Recipe>();
 
 }

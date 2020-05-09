@@ -47,8 +47,9 @@ public class CallisQuiver extends JavaPlugin {
         quiverrecipe.setIngredient('A', Material.ARROW);
         quiverrecipe.setIngredient('C', Material.CHEST);
         Bukkit.addRecipe(quiverrecipe);
-        // hold recipe
-        recipeHolder.recipes.add(quiverrecipe);
+        // hold !BUKKIT! (BUKKIT changes recipe)recipe
+        recipeHolder.recipes.put("quiver", Bukkit.getServer().getRecipesFor(quiver).get(0));
+
 
 
     }

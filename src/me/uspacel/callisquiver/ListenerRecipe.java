@@ -7,22 +7,23 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.Recipe;
 
 public class ListenerRecipe implements Listener {
-
+    // try to craft
     @EventHandler
     public void onPrepareItemCraftEvent(PrepareItemCraftEvent event) {
-
+        // if recipe is valid
         if (event.getRecipe() == null) {
             return;
 
         }
+        // if my recipe
         Recipe eventrecipe = event.getRecipe();
-        if (CallisQuiver.plugin.recipeHolder.recipes.contains(eventrecipe) == true) {
-            Bukkit.broadcastMessage("CRAFTING IS GREAT!");
+        if (Utility.compareRecipes(eventrecipe, CallisQuiver.plugin.recipeHolder.recipes.get("quiver"))) {
+            // Bukkit.broadcastMessage("CRAFTING IS GREAT!");
 
         }
-        else {
-            Bukkit.broadcastMessage("NE DU, DAS KLAPPT NCHT");
-        }
+        // else {
+            // Bukkit.broadcastMessage("NE DU, DAS KLAPPT NCHT");
+        
     }
 
 }
