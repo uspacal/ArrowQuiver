@@ -34,13 +34,15 @@ public class CallisQuiver extends JavaPlugin {
         quivermeta.setDisplayName("Arrow Quiver");
         // new list
         ArrayList<String> lore = new ArrayList();
-        lore.add("Arrows");
+        lore.add("Arrows: "+ 8);
         //add lore
         quivermeta.setLore(lore);
         // display in item data
         quiver.setItemMeta(quivermeta);
         // add Sting
         NBTHelper.addString(quiver, "id", "normalQuiver");
+        NBTHelper.addInteger(quiver, "maxArrows", 256 );
+        NBTHelper.addInteger(quiver, "accArrows", 8 );
         // make namekey
         NamespacedKey quiverkey = new NamespacedKey(this, "arrow_quiver");
         // create recipe

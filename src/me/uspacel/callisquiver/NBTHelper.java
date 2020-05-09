@@ -24,4 +24,22 @@ public class NBTHelper {
         return value;
 
     }
+
+    public static void addInteger(ItemStack item, String key, Integer value){
+        NamespacedKey nsk = new NamespacedKey(CallisQuiver.plugin, key);
+        // set item meta
+        ItemMeta itemmeta = item.getItemMeta();
+        itemmeta.getPersistentDataContainer().set(nsk, PersistentDataType.INTEGER, value );
+        item.setItemMeta(itemmeta);
+
+    }
+    public static Integer getInteger(ItemStack item, String key){
+        NamespacedKey nsk = new NamespacedKey(CallisQuiver.plugin, key);
+        // set item meta
+        ItemMeta itemmeta = item.getItemMeta();
+        Integer value = itemmeta.getPersistentDataContainer().get(nsk, PersistentDataType.INTEGER);
+        return value;
+
+    }
+
 }
