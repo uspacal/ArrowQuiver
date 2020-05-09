@@ -35,8 +35,7 @@ public class ListenerRecipe implements Listener {
         if (Utility.compareRecipes(eventrecipe, CallisQuiver.plugin.recipeHolder.recipes.get("quiver"))) {
             // Bukkit.broadcastMessage("CRAFTING IS GREAT!");
             ItemStack middleitem = event.getInventory().getMatrix()[4];
-            String nbt = NBTHelper.getString(middleitem, "id");
-            if (nbt != null && nbt.equals("normalQuiver")) {
+            if (Utility.NBTStrings.NORMAL_QUIVER.string.equals(NBTHelper.getString(middleitem, Utility.NBTStrings.ID.string))) {
                 // Bukkit.broadcastMessage(">oh no, its a quiver!");
                 event.getInventory().setResult(null);
             } else {
@@ -44,7 +43,7 @@ public class ListenerRecipe implements Listener {
                 // give unique user id (not stackable)
                 String uuid = UUID.randomUUID().toString();
                 Bukkit.getLogger().info(uuid);
-                NBTHelper.addString(result, "uuid", UUID.randomUUID().toString());
+                NBTHelper.addString(result, Utility.NBTStrings.UUID.string, UUID.randomUUID().toString());
 
 
             }
@@ -56,9 +55,8 @@ public class ListenerRecipe implements Listener {
 
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
-        ItemStack item = event.getItemInHand();
-        String nbt = NBTHelper.getString(item, "id");
-        if (nbt != null && nbt.equals("normalQuiver")) {
+
+        if (Utility.NBTStrings.NORMAL_QUIVER.string.equals(NBTHelper.getString(event.getItemInHand(), Utility.NBTStrings.ID.string))) {
             // Bukkit.broadcastMessage(">oh no, its a quiver!");
             event.setCancelled(true);
         }
@@ -73,21 +71,21 @@ public class ListenerRecipe implements Listener {
                 event.isRightClick() &&
                 event.getCursor().getType() == Material.ARROW) {
             // Bukkit.broadcastMessage(">broken? action");
-            if (!("normalQuiver".equals(NBTHelper.getString(event.getCurrentItem(), "id")))) return;
+            if (!(Utility.NBTStrings.NORMAL_QUIVER.string.equals(NBTHelper.getString(event.getCurrentItem(), Utility.NBTStrings.ID.string)))) return;
             // Bukkit.broadcastMessage(">broken? quiver");
             // get all needet values
             ItemStack arrow = event.getCursor();
             ItemStack quiver = event.getCurrentItem();
             int amount = arrow.getAmount();
-            int maxArrows = NBTHelper.getInteger(quiver, "maxArrows");
-            int accArrows = NBTHelper.getInteger(quiver, "accArrows");
+            int maxArrows = NBTHelper.getInteger(quiver, Utility.NBTStrings.MAXIMAL_ARROWS.string);
+            int accArrows = NBTHelper.getInteger(quiver, Utility.NBTStrings.ACTUAL_ARROWS.string);
             // calc left arrow space
             int leftAmount = maxArrows - accArrows;
             int fill = Math.min(leftAmount, amount);
             // Bukkit.broadcastMessage("" + fill);
             accArrows += fill;
             arrow.setAmount(amount - fill);
-            NBTHelper.addInteger(quiver, "accArrows", accArrows);
+            NBTHelper.addInteger(quiver, Utility.NBTStrings.ACTUAL_ARROWS.string, accArrows);
             ItemMeta quivermeta = quiver.getItemMeta();
             ArrayList<String> lore = new ArrayList();
             lore.add("Arrows: " + accArrows + "/256");
@@ -115,8 +113,8 @@ public class ListenerRecipe implements Listener {
         for (int i = 0; i < inventory.length; i++) {
 
             if (inventory[i] == null || !(inventory[i].getType() == Material.CHEST)) continue;
-            if (!("normalQuiver".equals(NBTHelper.getString(inventory[i], "id")))) continue;
-            if (1 > (NBTHelper.getInteger(inventory[i], "accArrow"))) continue;
+            if (!(Utility.NBTStrings.NORMAL_QUIVER.string.equals(NBTHelper.getString(inventory[i], Utility.NBTStrings.ID.string)))) continue;
+            if (1 > (NBTHelper.getInteger(inventory[i], Utility.NBTStrings.ACTUAL_ARROWS.string))) continue;
             int empty = player.getInventory().firstEmpty();
             if (empty <= -1) {
                 continue;

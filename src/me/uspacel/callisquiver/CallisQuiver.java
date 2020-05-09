@@ -41,9 +41,9 @@ public class CallisQuiver extends JavaPlugin {
         // display in item data
         quiver.setItemMeta(quivermeta);
         // add Sting
-        NBTHelper.addString(quiver, "id", "normalQuiver");
-        NBTHelper.addInteger(quiver, "maxArrows", 256 );
-        NBTHelper.addInteger(quiver, "accArrows", 8 );
+        NBTHelper.addString(quiver, "id", Utility.NBTStrings.NORMAL_QUIVER.string);
+        NBTHelper.addInteger(quiver, Utility.NBTStrings.MAXIMAL_ARROWS.string, 256 );
+        NBTHelper.addInteger(quiver, Utility.NBTStrings.ACTUAL_ARROWS.string, 8 );
         // make namekey
         NamespacedKey quiverkey = new NamespacedKey(this, "arrow_quiver");
         // create recipe

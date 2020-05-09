@@ -8,6 +8,16 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.Map;
 
 public class Utility {
+
+    public enum NBTStrings {
+        ACTUAL_ARROWS("AccArrows"), MAXIMAL_ARROWS("maxArrows"), ID("id"), NORMAL_QUIVER("normalQuiver"),
+        UUID("uuid");
+
+        public final String string;
+        private NBTStrings(String s){
+            string = s;
+        }
+    }
     /**
      * Compares Recipe
      * @param r1 first recipe
