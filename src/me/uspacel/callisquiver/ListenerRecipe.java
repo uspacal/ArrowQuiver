@@ -74,20 +74,19 @@ public class ListenerRecipe implements Listener {
             ItemStack quiver = event.getCurrentItem();
             int amount = arrow.getAmount();
             int maxArrows = NBTHelper.getInteger(quiver, "maxArrows");
-            int actualArrows = NBTHelper.getInteger(quiver, "accArrows");
+            int accArrows = NBTHelper.getInteger(quiver, "accArrows");
             // calc left arrow space
-            int leftAmount = maxArrows - actualArrows;
-            if (amount <= leftAmount){
-                actualArrows += amount;
-                arrow.setAmount(0);
-
-                ItemMeta quivermeta = quiver.getItemMeta();
-                ArrayList<String> lore = new ArrayList();
-                lore.add("Arrows: "+ actualArrows);
-                quivermeta.setLore(lore);
-                quiver.setItemMeta(quivermeta);
-
-            }
+            int leftAmount = maxArrows - accArrows;
+            int fill = Math.min(leftAmount, amount);
+            Bukkit.broadcastMessage("" + fill);
+            accArrows += fill;
+            arrow.setAmount(amount - fill);
+            NBTHelper.addInteger(quiver, "accArrows", accArrows);
+            ItemMeta quivermeta = quiver.getItemMeta();
+            ArrayList<String> lore = new ArrayList();
+            lore.add("Arrows: " + accArrows + "/256");
+            quivermeta.setLore(lore);
+            quiver.setItemMeta(quivermeta);
 
 
             event.setCancelled(true);
