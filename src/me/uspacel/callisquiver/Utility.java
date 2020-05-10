@@ -8,6 +8,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import java.util.Map;
 
 public class Utility {
+
     /**
      * Compares Recipe
      * @param r1 first recipe
