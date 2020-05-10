@@ -1,6 +1,6 @@
 package me.uspacel.callisquiver;
 
-import org.apache.commons.lang.ObjectUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.inventory.ClickType;
+
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -17,11 +17,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.awt.*;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class ListenerRecipe implements Listener {
+public class ListenerQuiver implements Listener {
     // try to craft
     @EventHandler
     public void onPrepareItemCraftEvent(PrepareItemCraftEvent event) {
@@ -32,7 +32,7 @@ public class ListenerRecipe implements Listener {
         }
         // if my recipe
         Recipe eventrecipe = event.getRecipe();
-        if (Utility.compareRecipes(eventrecipe, CallisQuiver.plugin.recipeHolder.recipes.get("quiver"))) {
+        if (Utility.compareRecipes(eventrecipe, CallisQuiver.recipeHolder.recipes.get("simplequiver"))) {
             // Bukkit.broadcastMessage("CRAFTING IS GREAT!");
             ItemStack middleitem = event.getInventory().getMatrix()[4];
             if (NBTHelper.NORMAL_QUIVER.equals(NBTHelper.getString(middleitem, NBTHelper.ID))) {

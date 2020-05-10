@@ -12,48 +12,16 @@ import java.util.ArrayList;
 
 public class CallisQuiver extends JavaPlugin {
 
-    public RecipeHolder recipeHolder;
+    public static RecipeHolder recipeHolder;
     public static CallisQuiver plugin = null;
 
     @Override
     public void onEnable() {
         plugin = this;
         this.getLogger().info("start successful");
-        recipeHolder = new RecipeHolder();
-
-        getServer().getPluginManager().registerEvents(new ListenerRecipe(), this);
-
-        // new item
-        ItemStack quiver = new ItemStack(Material.CHEST);
-        // item meta
-        ItemMeta quivermeta = quiver.getItemMeta();
-        // set display name
-        quivermeta.setDisplayName("Arrow Quiver");
-        // new list
-        ArrayList<String> lore = new ArrayList();
-        lore.add("Arrows: "+ 8 + "/256");
-
-        //add lore
-        quivermeta.setLore(lore);
-        // display in item data
-        quiver.setItemMeta(quivermeta);
-        // add Sting
-        NBTHelper.setString(quiver, NBTHelper.ID, NBTHelper.NORMAL_QUIVER);
-        NBTHelper.setInteger(quiver, NBTHelper.MAXIMAL_ARROWS, 256 );
-        NBTHelper.setInteger(quiver, NBTHelper.ACTUAL_ARROWS, 8 );
-        // make namekey
-        NamespacedKey quiverkey = new NamespacedKey(this, "arrow_quiver");
-        // create recipe
-        ShapedRecipe quiverrecipe = new ShapedRecipe(quiverkey, quiver);
-        quiverrecipe.shape("AAA","ACA","AAA");
-        quiverrecipe.setIngredient('A', Material.ARROW);
-        quiverrecipe.setIngredient('C', Material.CHEST);
-        Bukkit.addRecipe(quiverrecipe);
-        // hold !BUKKIT! (BUKKIT changes recipe)recipe
-        recipeHolder.recipes.put("quiver", Bukkit.getServer().getRecipesFor(quiver).get(0));
-
-
-
+        getServer().getPluginManager().registerEvents(new ListenerQuiver(), this);
+        NewRecipe.addSimpleQuiver();
+        this.getLogger().info("finisched loding");
     }
 
     @Override
