@@ -23,11 +23,16 @@ public class NBTHelper {
         item.setItemMeta(itemmeta);
 
     }
-    public static String getString(ItemStack item, String key){
+    public static String getString(ItemStack item, String key) {
         NamespacedKey nsk = new NamespacedKey(CallisQuiver.plugin, key);
         // set item meta
-        ItemMeta itemmeta = item.getItemMeta();
-        String value = itemmeta.getPersistentDataContainer().get(nsk, PersistentDataType.STRING);
+        String value = null;
+        try {
+            ItemMeta itemmeta = item.getItemMeta();
+            value = itemmeta.getPersistentDataContainer().get(nsk, PersistentDataType.STRING);
+        } catch (NullPointerException e){
+
+        }
         return value;
 
     }
@@ -43,8 +48,13 @@ public class NBTHelper {
     public static Integer getInteger(ItemStack item, String key){
         NamespacedKey nsk = new NamespacedKey(CallisQuiver.plugin, key);
         // set item meta
-        ItemMeta itemmeta = item.getItemMeta();
-        Integer value = itemmeta.getPersistentDataContainer().get(nsk, PersistentDataType.INTEGER);
+        Integer value = null;
+        try {
+            ItemMeta itemmeta = item.getItemMeta();
+            value = itemmeta.getPersistentDataContainer().get(nsk, PersistentDataType.INTEGER);
+        } catch(NullPointerException e){
+
+        }
         return value;
 
     }

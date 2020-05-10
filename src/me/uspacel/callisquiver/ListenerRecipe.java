@@ -68,11 +68,12 @@ public class ListenerRecipe implements Listener {
         // Bukkit.broadcastMessage(">broken? event");
         if (!(event.getWhoClicked() instanceof Player)) return;
         // Bukkit.broadcastMessage(">broken? player");
+        if (!(NBTHelper.NORMAL_QUIVER.equals(NBTHelper.getString(event.getCurrentItem(), NBTHelper.ID)))) return;
         if (event.getAction() == InventoryAction.SWAP_WITH_CURSOR &&
                 event.isRightClick() &&
                 event.getCursor().getType() == Material.ARROW) {
             // Bukkit.broadcastMessage(">broken? action");
-            if (!(NBTHelper.NORMAL_QUIVER.equals(NBTHelper.getString(event.getCurrentItem(), NBTHelper.ID)))) return;
+
             // Bukkit.broadcastMessage(">broken? quiver");
             // get all needet values
             ItemStack arrow = event.getCursor();
@@ -99,8 +100,9 @@ public class ListenerRecipe implements Listener {
             player.sendMessage("Loaded " + fill + " Arrows! " + "(" + accArrows + "/ 256)");
             player.updateInventory();
 
-        } else if (event.isRightClick() &&
-                event.getCursor().getType() == null) {
+        } else if (event.getAction() == InventoryAction.PICKUP_HALF) {
+            Bukkit.broadcastMessage(event.getAction().toString());
+            Bukkit.broadcastMessage("curser Null & right click");
             ItemStack quiver = event.getCurrentItem();
             int maxArrows = NBTHelper.getInteger(quiver, NBTHelper.MAXIMAL_ARROWS);
             int accArrows = NBTHelper.getInteger(quiver, NBTHelper.ACTUAL_ARROWS);
