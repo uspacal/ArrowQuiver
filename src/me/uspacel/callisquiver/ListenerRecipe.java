@@ -123,7 +123,7 @@ public class ListenerRecipe implements Listener {
             Bukkit.broadcastMessage("" + remove);
             event.setCursor(new ItemStack(Material.ARROW, remove));
             Bukkit.broadcastMessage(">broken? arrow");
-            NBTHelper.addInteger(quiver, "accArrows", accArrows);
+            NBTHelper.setInteger(quiver, "accArrows", accArrows);
             ItemMeta quivermeta = quiver.getItemMeta();
             ArrayList<String> lore = new ArrayList();
             lore.add("Arrows: " + accArrows + "/256");
@@ -164,7 +164,7 @@ public class ListenerRecipe implements Listener {
                 int accArrows = NBTHelper.getInteger(quiver, "accArrows");
                 accArrows--;
                 player.getInventory().addItem(new ItemStack(Material.ARROW, 1));
-                NBTHelper.addInteger(quiver, "accArrows", accArrows);
+                NBTHelper.setInteger(quiver, "accArrows", accArrows);
                 ItemMeta quivermeta = quiver.getItemMeta();
                 ArrayList<String> lore = new ArrayList();
                 lore.add("Arrows: " + accArrows + "/256");
@@ -188,16 +188,16 @@ public class ListenerRecipe implements Listener {
         for (int i = 0; i < inventory.length; i++) {
             // Bukkit.broadcastMessage(""+ i);
             if (inventory[i] == null || !(inventory[i].getType() == Material.CHEST)) continue;
-<<<<<<< HEAD
+
             // Bukkit.broadcastMessage("Item in slot");
             if (!("normalQuiver".equals(NBTHelper.getString(inventory[i], "id")))) continue;
             // Bukkit.broadcastMessage("Quiver found");
             if (1 > (NBTHelper.getInteger(inventory[i], "accArrows"))) continue;
             // Bukkit.broadcastMessage("Arrow in quiver");
-=======
+
             if (!(NBTHelper.NORMAL_QUIVER.equals(NBTHelper.getString(inventory[i], NBTHelper.ID)))) continue;
             if (1 > (NBTHelper.getInteger(inventory[i], NBTHelper.ACTUAL_ARROWS))) continue;
->>>>>>> 20000905237419b56c7c601d935ed6494be706af
+
             int empty = player.getInventory().firstEmpty();
 
             if (empty <= -1) {
@@ -207,7 +207,7 @@ public class ListenerRecipe implements Listener {
                 int accArrows = NBTHelper.getInteger(quiver, "accArrows");
                 accArrows--;
                 player.getInventory().addItem(new ItemStack(Material.ARROW, 1));
-                NBTHelper.addInteger(quiver, "accArrows", accArrows);
+                NBTHelper.setInteger(quiver, "accArrows", accArrows);
                 ItemMeta quivermeta = quiver.getItemMeta();
                 ArrayList<String> lore = new ArrayList();
                 lore.add("Arrows: " + accArrows + "/256");
