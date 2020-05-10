@@ -137,7 +137,9 @@ public class ListenerRecipe implements Listener {
         if (!(event.getMaterial() == Material.BOW || event.getMaterial() == Material.CROSSBOW)) return;
         // Bukkit.broadcastMessage(">bow");
         Player player = event.getPlayer();
+        if (player.getInventory().contains(Material.ARROW)) return;
         ItemStack[] inventory = player.getInventory().getStorageContents();
+        Integer placeQuiver = null;
         for (int i = 0; i < inventory.length; i++) {
             // Bukkit.broadcastMessage(""+ i);
             if (inventory[i] == null || !(inventory[i].getType() == Material.CHEST)) continue;
@@ -146,26 +148,34 @@ public class ListenerRecipe implements Listener {
             // Bukkit.broadcastMessage("Quiver found");
             if (1 > (NBTHelper.getInteger(inventory[i], NBTHelper.ACTUAL_ARROWS))) continue;
             // Bukkit.broadcastMessage("Arrow in quiver");
-            int empty = player.getInventory().firstEmpty();
+            placeQuiver = i;
+            break;
+        }
+        if (placeQuiver == null) return;
+        int empty = player.getInventory().firstEmpty();
 
-            if (empty <= -1) {
-                continue;
-            } else {
-                ItemStack quiver = inventory[i];
-                int accArrows = NBTHelper.getInteger(quiver, NBTHelper.ACTUAL_ARROWS);
-                accArrows--;
-                player.getInventory().addItem(new ItemStack(Material.ARROW, 1));
-                NBTHelper.setInteger(quiver, NBTHelper.ACTUAL_ARROWS, accArrows);
-                ItemMeta quivermeta = quiver.getItemMeta();
-                ArrayList<String> lore = new ArrayList();
-                lore.add("Arrows: " + accArrows + "/256");
-                quivermeta.setLore(lore);
-                quiver.setItemMeta(quivermeta);
-                return;
-            }
 
+        if (empty <= -1 && (player.getInventory().getItemInOffHand().getAmount() != 0)) {
+            return;
+        }
+        if (player.getInventory().getItemInOffHand().getAmount() == 0) {
+            empty = 40;
+        }
+        {
+            ItemStack quiver = inventory[placeQuiver];
+            int accArrows = NBTHelper.getInteger(quiver, NBTHelper.ACTUAL_ARROWS);
+            accArrows--;
+            player.getInventory().setItem(empty, new ItemStack(Material.ARROW, 1));
+            NBTHelper.setInteger(quiver, NBTHelper.ACTUAL_ARROWS, accArrows);
+            ItemMeta quivermeta = quiver.getItemMeta();
+            ArrayList<String> lore = new ArrayList();
+            lore.add("Arrows: " + accArrows + "/256");
+            quivermeta.setLore(lore);
+            quiver.setItemMeta(quivermeta);
 
         }
+
+
     }
 
 
