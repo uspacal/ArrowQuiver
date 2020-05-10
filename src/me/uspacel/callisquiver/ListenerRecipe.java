@@ -1,5 +1,6 @@
 package me.uspacel.callisquiver;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -9,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -18,6 +20,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -64,8 +67,9 @@ public class ListenerRecipe implements Listener {
         }
     }
 
+    // load arrows
     @EventHandler
-    public void onInventoryClickEvent(InventoryClickEvent event) {
+    public void onInventoryClickEventAdd(InventoryClickEvent event) {
         // Bukkit.broadcastMessage(">broken? event");
         if (!(event.getWhoClicked() instanceof Player)) return;
         // Bukkit.broadcastMessage(">broken? player");
@@ -97,15 +101,51 @@ public class ListenerRecipe implements Listener {
 
             event.setCancelled(true);
             Player player = (Player) event.getWhoClicked();
+            player.sendMessage("Loaded " + fill + " Arrows! " + "(" + accArrows + "/ 256)");
             player.updateInventory();
-            player.sendMessage("Loaded " + fill + " Arrows!");
 
+        }
+    }
+
+    // remove arrows
+    @EventHandler
+    public void onInventoryClickEventRemove(InventoryClickEvent event) {
+        // Bukkit.broadcastMessage(">broken? event");
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        // Bukkit.broadcastMessage(">broken? player");
+        if (event.isRightClick() && event.getCursor() == null) {
+            Bukkit.broadcastMessage(">broken? action");
+            if (!("normalQuiver".equals(NBTHelper.getString(event.getCurrentItem(), "id")))) return;
+            Bukkit.broadcastMessage(">broken? quiver");
+            // get all needet values
+            ItemStack quiver = event.getCurrentItem();
+            int maxArrows = NBTHelper.getInteger(quiver, "maxArrows");
+            int accArrows = NBTHelper.getInteger(quiver, "accArrows");
+            // calc left arrow space
+
+            int remove = ((accArrows >= 64) ? 64 : accArrows);
+            accArrows = accArrows -= remove;
+            Bukkit.broadcastMessage("" + remove);
+            event.setCursor(new ItemStack(Material.ARROW, remove));
+            Bukkit.broadcastMessage(">broken? arrow");
+            NBTHelper.addInteger(quiver, "accArrows", accArrows);
+            ItemMeta quivermeta = quiver.getItemMeta();
+            ArrayList<String> lore = new ArrayList();
+            lore.add("Arrows: " + accArrows + "/256");
+            quivermeta.setLore(lore);
+            quiver.setItemMeta(quivermeta);
+
+
+            event.setCancelled(true);
+            Player player = (Player) event.getWhoClicked();
+            player.sendMessage("Removed " + remove + " Arrows! " + "(" + accArrows + "/ 256)");
+            player.updateInventory();
 
         }
     }
 
     @EventHandler
-    public void onPlayerInteractEvent(PlayerInteractEvent event) {
+    public void onPlayerInteractBowEvent(PlayerInteractEvent event) {
         if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
         // Bukkit.broadcastMessage(">rightclick");
         if (!(event.getMaterial() == Material.BOW)) return;
@@ -113,15 +153,67 @@ public class ListenerRecipe implements Listener {
         Player player = event.getPlayer();
         ItemStack[] inventory = player.getInventory().getStorageContents();
         for (int i = 0; i < inventory.length; i++) {
-
+            // Bukkit.broadcastMessage(""+ i);
             if (inventory[i] == null || !(inventory[i].getType() == Material.CHEST)) continue;
+            // Bukkit.broadcastMessage("Item in slot");
             if (!("normalQuiver".equals(NBTHelper.getString(inventory[i], "id")))) continue;
-            if (1 > (NBTHelper.getInteger(inventory[i], "accArrow"))) continue;
+            // Bukkit.broadcastMessage("Quiver found");
+            if (1 > (NBTHelper.getInteger(inventory[i], "accArrows"))) continue;
+            // Bukkit.broadcastMessage("Arrow in quiver");
             int empty = player.getInventory().firstEmpty();
+
             if (empty <= -1) {
                 continue;
             } else {
+                ItemStack quiver = inventory[i];
+                int accArrows = NBTHelper.getInteger(quiver, "accArrows");
+                accArrows--;
                 player.getInventory().addItem(new ItemStack(Material.ARROW, 1));
+                NBTHelper.addInteger(quiver, "accArrows", accArrows);
+                ItemMeta quivermeta = quiver.getItemMeta();
+                ArrayList<String> lore = new ArrayList();
+                lore.add("Arrows: " + accArrows + "/256");
+                quivermeta.setLore(lore);
+                quiver.setItemMeta(quivermeta);
+                return;
+            }
+
+
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteractCrossbowEvent(PlayerInteractEvent event) {
+        if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
+        // Bukkit.broadcastMessage(">rightclick");
+        if (!(event.getMaterial() == Material.CROSSBOW)) return;
+        // Bukkit.broadcastMessage(">crossbow");
+        Player player = event.getPlayer();
+        ItemStack[] inventory = player.getInventory().getStorageContents();
+        for (int i = 0; i < inventory.length; i++) {
+            // Bukkit.broadcastMessage(""+ i);
+            if (inventory[i] == null || !(inventory[i].getType() == Material.CHEST)) continue;
+            // Bukkit.broadcastMessage("Item in slot");
+            if (!("normalQuiver".equals(NBTHelper.getString(inventory[i], "id")))) continue;
+            // Bukkit.broadcastMessage("Quiver found");
+            if (1 > (NBTHelper.getInteger(inventory[i], "accArrows"))) continue;
+            // Bukkit.broadcastMessage("Arrow in quiver");
+            int empty = player.getInventory().firstEmpty();
+
+            if (empty <= -1) {
+                continue;
+            } else {
+                ItemStack quiver = inventory[i];
+                int accArrows = NBTHelper.getInteger(quiver, "accArrows");
+                accArrows--;
+                player.getInventory().addItem(new ItemStack(Material.ARROW, 1));
+                NBTHelper.addInteger(quiver, "accArrows", accArrows);
+                ItemMeta quivermeta = quiver.getItemMeta();
+                ArrayList<String> lore = new ArrayList();
+                lore.add("Arrows: " + accArrows + "/256");
+                quivermeta.setLore(lore);
+                quiver.setItemMeta(quivermeta);
+                return;
             }
 
 
