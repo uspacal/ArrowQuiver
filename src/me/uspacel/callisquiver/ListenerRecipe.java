@@ -137,7 +137,8 @@ public class ListenerRecipe implements Listener {
         if (!(event.getMaterial() == Material.BOW || event.getMaterial() == Material.CROSSBOW)) return;
         // Bukkit.broadcastMessage(">bow");
         Player player = event.getPlayer();
-        if (player.getInventory().contains(Material.ARROW)) return;
+        if (player.getInventory().contains(Material.ARROW) ||
+                player.getInventory().getItemInOffHand().getType() == Material.ARROW) return;
         ItemStack[] inventory = player.getInventory().getStorageContents();
         Integer placeQuiver = null;
         for (int i = 0; i < inventory.length; i++) {
@@ -155,12 +156,10 @@ public class ListenerRecipe implements Listener {
         int empty = player.getInventory().firstEmpty();
 
 
-        if (empty <= -1 && (player.getInventory().getItemInOffHand().getAmount() != 0)) {
-            return;
-        }
-        if (player.getInventory().getItemInOffHand().getAmount() == 0) {
-            empty = 40;
-        }
+        if (empty <= -1 && (player.getInventory().getItemInOffHand().getAmount() != 0)) return;
+
+        if (player.getInventory().getItemInOffHand().getAmount() == 0) empty = 40;
+
         {
             ItemStack quiver = inventory[placeQuiver];
             int accArrows = NBTHelper.getInteger(quiver, NBTHelper.ACTUAL_ARROWS);
