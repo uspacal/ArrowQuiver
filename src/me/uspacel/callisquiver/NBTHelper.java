@@ -8,7 +8,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 public class NBTHelper {
-    public static void addString(ItemStack item, String key, String value){
+
+    public static final String ACTUAL_ARROWS = "AccArrows";
+    public static final String MAXIMAL_ARROWS = "maxArrows";
+    public static final String ID = "id";
+    public static final String NORMAL_QUIVER = "normalQuiver";
+    public static final String UUID = "uuid";
+
+    public static void setString(ItemStack item, String key, String value){
         NamespacedKey nsk = new NamespacedKey(CallisQuiver.plugin, key);
         // set item meta
         ItemMeta itemmeta = item.getItemMeta();
@@ -25,7 +32,7 @@ public class NBTHelper {
 
     }
 
-    public static void addInteger(ItemStack item, String key, Integer value){
+    public static void setInteger(ItemStack item, String key, Integer value){
         NamespacedKey nsk = new NamespacedKey(CallisQuiver.plugin, key);
         // set item meta
         ItemMeta itemmeta = item.getItemMeta();

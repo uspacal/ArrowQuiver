@@ -2,8 +2,6 @@ package me.uspacel.callisquiver;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +12,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -35,7 +32,7 @@ public class ListenerRecipe implements Listener {
         if (Utility.compareRecipes(eventrecipe, CallisQuiver.plugin.recipeHolder.recipes.get("quiver"))) {
             // Bukkit.broadcastMessage("CRAFTING IS GREAT!");
             ItemStack middleitem = event.getInventory().getMatrix()[4];
-            if (Utility.NBTStrings.NORMAL_QUIVER.string.equals(NBTHelper.getString(middleitem, Utility.NBTStrings.ID.string))) {
+            if (NBTHelper.NORMAL_QUIVER.equals(NBTHelper.getString(middleitem, NBTHelper.ID))) {
                 // Bukkit.broadcastMessage(">oh no, its a quiver!");
                 event.getInventory().setResult(null);
             } else {
@@ -43,7 +40,7 @@ public class ListenerRecipe implements Listener {
                 // give unique user id (not stackable)
                 String uuid = UUID.randomUUID().toString();
                 Bukkit.getLogger().info(uuid);
-                NBTHelper.addString(result, Utility.NBTStrings.UUID.string, UUID.randomUUID().toString());
+                NBTHelper.setString(result, NBTHelper.UUID, UUID.randomUUID().toString());
 
 
             }
@@ -56,7 +53,7 @@ public class ListenerRecipe implements Listener {
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
 
-        if (Utility.NBTStrings.NORMAL_QUIVER.string.equals(NBTHelper.getString(event.getItemInHand(), Utility.NBTStrings.ID.string))) {
+        if (NBTHelper.NORMAL_QUIVER.equals(NBTHelper.getString(event.getItemInHand(), NBTHelper.ID))) {
             // Bukkit.broadcastMessage(">oh no, its a quiver!");
             event.setCancelled(true);
         }
@@ -71,21 +68,21 @@ public class ListenerRecipe implements Listener {
                 event.isRightClick() &&
                 event.getCursor().getType() == Material.ARROW) {
             // Bukkit.broadcastMessage(">broken? action");
-            if (!(Utility.NBTStrings.NORMAL_QUIVER.string.equals(NBTHelper.getString(event.getCurrentItem(), Utility.NBTStrings.ID.string)))) return;
+            if (!(NBTHelper.NORMAL_QUIVER.equals(NBTHelper.getString(event.getCurrentItem(), NBTHelper.ID)))) return;
             // Bukkit.broadcastMessage(">broken? quiver");
             // get all needet values
             ItemStack arrow = event.getCursor();
             ItemStack quiver = event.getCurrentItem();
             int amount = arrow.getAmount();
-            int maxArrows = NBTHelper.getInteger(quiver, Utility.NBTStrings.MAXIMAL_ARROWS.string);
-            int accArrows = NBTHelper.getInteger(quiver, Utility.NBTStrings.ACTUAL_ARROWS.string);
+            int maxArrows = NBTHelper.getInteger(quiver, NBTHelper.MAXIMAL_ARROWS);
+            int accArrows = NBTHelper.getInteger(quiver, NBTHelper.ACTUAL_ARROWS);
             // calc left arrow space
             int leftAmount = maxArrows - accArrows;
             int fill = Math.min(leftAmount, amount);
             // Bukkit.broadcastMessage("" + fill);
             accArrows += fill;
             arrow.setAmount(amount - fill);
-            NBTHelper.addInteger(quiver, Utility.NBTStrings.ACTUAL_ARROWS.string, accArrows);
+            NBTHelper.setInteger(quiver, NBTHelper.ACTUAL_ARROWS, accArrows);
             ItemMeta quivermeta = quiver.getItemMeta();
             ArrayList<String> lore = new ArrayList();
             lore.add("Arrows: " + accArrows + "/256");
@@ -113,8 +110,8 @@ public class ListenerRecipe implements Listener {
         for (int i = 0; i < inventory.length; i++) {
 
             if (inventory[i] == null || !(inventory[i].getType() == Material.CHEST)) continue;
-            if (!(Utility.NBTStrings.NORMAL_QUIVER.string.equals(NBTHelper.getString(inventory[i], Utility.NBTStrings.ID.string)))) continue;
-            if (1 > (NBTHelper.getInteger(inventory[i], Utility.NBTStrings.ACTUAL_ARROWS.string))) continue;
+            if (!(NBTHelper.NORMAL_QUIVER.equals(NBTHelper.getString(inventory[i], NBTHelper.ID)))) continue;
+            if (1 > (NBTHelper.getInteger(inventory[i], NBTHelper.ACTUAL_ARROWS))) continue;
             int empty = player.getInventory().firstEmpty();
             if (empty <= -1) {
                 continue;

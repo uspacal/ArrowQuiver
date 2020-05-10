@@ -4,14 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.logging.Level;
 
 public class CallisQuiver extends JavaPlugin {
 
@@ -41,9 +38,9 @@ public class CallisQuiver extends JavaPlugin {
         // display in item data
         quiver.setItemMeta(quivermeta);
         // add Sting
-        NBTHelper.addString(quiver, Utility.NBTStrings.ID.string, Utility.NBTStrings.NORMAL_QUIVER.string);
-        NBTHelper.addInteger(quiver, Utility.NBTStrings.MAXIMAL_ARROWS.string, 256 );
-        NBTHelper.addInteger(quiver, Utility.NBTStrings.ACTUAL_ARROWS.string, 8 );
+        NBTHelper.setString(quiver, NBTHelper.ID, NBTHelper.NORMAL_QUIVER);
+        NBTHelper.setInteger(quiver, NBTHelper.MAXIMAL_ARROWS, 256 );
+        NBTHelper.setInteger(quiver, NBTHelper.ACTUAL_ARROWS, 8 );
         // make namekey
         NamespacedKey quiverkey = new NamespacedKey(this, "arrow_quiver");
         // create recipe
